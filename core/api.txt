@@ -800,6 +800,7 @@ ion-modal,method,onDidDismiss,onDidDismiss<T = any>() => Promise<OverlayEventDet
 ion-modal,method,onWillDismiss,onWillDismiss<T = any>() => Promise<OverlayEventDetail<T>>
 ion-modal,method,present,present() => Promise<void>
 ion-modal,method,setCurrentBreakpoint,setCurrentBreakpoint(breakpoint: number) => Promise<void>
+ion-modal,method,updateBreakpoints,updateBreakpoints(breakpoints: number[] | undefined, initialPoint: number) => Promise<void>
 ion-modal,event,didDismiss,OverlayEventDetail<any>,true
 ion-modal,event,didPresent,void,true
 ion-modal,event,ionBreakpointDidChange,ModalBreakpointChangeEventDetail,true

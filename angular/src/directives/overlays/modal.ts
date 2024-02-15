@@ -75,7 +75,7 @@ export declare interface IonModal extends Components.IonModal {
     'translucent',
     'trigger',
   ],
-  methods: ['present', 'dismiss', 'onDidDismiss', 'onWillDismiss', 'setCurrentBreakpoint', 'getCurrentBreakpoint'],
+  methods: ['present', 'dismiss', 'onDidDismiss', 'onWillDismiss', 'setCurrentBreakpoint', 'getCurrentBreakpoint', 'updateBreakpoints'],
 })
 @Component({
   selector: 'ion-modal',

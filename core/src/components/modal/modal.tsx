@@ -337,6 +337,18 @@ export class Modal implements ComponentInterface, OverlayInterface {
     }
   }
 
+  @Method()
+  async updateBreakpoints(breakpoints: number[] | undefined, initialPoint: number): Promise<void> {
+    this.breakpointsChanged(breakpoints);
+    this.breakpoints = this.sortedBreakpoints;
+    if (this.gesture) {
+      this.gesture.enable(false);
+      this.gesture.destroy();
+      this.initialBreakpoint = initialPoint;
+      this.initSheetGesture();
+    }
+  }
+
   breakpointsChanged(breakpoints: number[] | undefined) {
     if (breakpoints !== undefined) {
       this.sortedBreakpoints = breakpoints.sort((a, b) => a - b);
