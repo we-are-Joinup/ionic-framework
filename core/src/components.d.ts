@@ -1664,7 +1664,10 @@ export namespace Components {
           * An ID corresponding to the trigger element that causes the modal to open when clicked.
          */
         "trigger": string | undefined;
-        "updateBreakpoints": (breakpoints: number[] | undefined, initialPoint: number) => Promise<void>;
+        /**
+          * Allow to update the modal breakpoints and set the new current breakpoint
+         */
+        "updateBreakpoints": (breakpoints: number[] | undefined, currentBreakpoint: number) => Promise<void>;
     }
     interface IonNav {
         /**

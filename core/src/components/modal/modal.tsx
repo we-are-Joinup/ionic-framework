@@ -337,16 +337,15 @@ export class Modal implements ComponentInterface, OverlayInterface {
     }
   }
 
+  /**
+   * Allow to update the modal breakpoints and set the new current breakpoint
+   */
   @Method()
-  async updateBreakpoints(breakpoints: number[] | undefined, initialPoint: number): Promise<void> {
+  async updateBreakpoints(breakpoints: number[] | undefined, currentBreakpoint: number): Promise<void> {
     this.breakpointsChanged(breakpoints);
     this.breakpoints = this.sortedBreakpoints;
-    if (this.gesture) {
-      this.gesture.enable(false);
-      this.gesture.destroy();
-      this.initialBreakpoint = initialPoint;
-      this.initSheetGesture();
-    }
+    this.currentBreakpoint = currentBreakpoint;
+    this.initSheetGesture(currentBreakpoint);
   }
 
   breakpointsChanged(breakpoints: number[] | undefined) {
@@ -650,8 +649,8 @@ export class Modal implements ComponentInterface, OverlayInterface {
     this.gesture.enable(true);
   }
 
-  private initSheetGesture() {
-    const { wrapperEl, initialBreakpoint, backdropBreakpoint } = this;
+  private initSheetGesture(initialBreakpoint = this.initialBreakpoint) {
+    const { wrapperEl, backdropBreakpoint } = this;
 
     if (!wrapperEl || initialBreakpoint === undefined) {
       return;
