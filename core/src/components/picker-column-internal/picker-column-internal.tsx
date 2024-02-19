@@ -2,9 +2,10 @@ import type { ComponentInterface, EventEmitter } from '@stencil/core';
 import { Component, Element, Event, Host, Method, Prop, State, Watch, h } from '@stencil/core';
 
 import { getIonMode } from '../../global/ionic-global';
-import type { Color } from '../../interface';
+import type { Color, Gesture, GestureDetail } from '../../interface';
 import { getElementRoot, raf } from '../../utils/helpers';
 import { hapticSelectionChanged, hapticSelectionEnd, hapticSelectionStart } from '../../utils/native/haptic';
+import { isPlatform } from '../../utils/platform';
 import { createColorClasses } from '../../utils/theme';
 import type { PickerInternalCustomEvent } from '../picker-internal/picker-internal-interfaces';
 
@@ -29,6 +30,9 @@ export class PickerColumnInternal implements ComponentInterface {
   private isColumnVisible = false;
   private parentEl?: HTMLIonPickerInternalElement | null;
   private canExitInputMode = true;
+  private gesture?: Gesture;
+  private startScrollY = 0;
+  private isGesture = false;
 
   @State() isActive = false;
 
@@ -84,7 +88,7 @@ export class PickerColumnInternal implements ComponentInterface {
    * the container will have a scroll
    * height of 0px.
    */
-  componentWillLoad() {
+  async componentWillLoad() {
     const visibleCallback = (entries: IntersectionObserverEntry[]) => {
       const ev = entries[0];
 
@@ -115,6 +119,20 @@ export class PickerColumnInternal implements ComponentInterface {
     if (parentEl !== null) {
       // TODO(FW-2832): type
       parentEl.addEventListener('ionInputModeChange', (ev: any) => this.inputModeChange(ev));
+    }
+
+    this.gesture = (await import('../../utils/gesture')).createGesture({
+      el: this.el,
+      gestureName: 'picker-swipe',
+      gesturePriority: 100,
+      threshold: 0,
+      passive: false,
+      onStart: (ev) => this.onStart(ev),
+      onMove: (ev) => this.onMove(ev),
+      onEnd: () => this.onEnd(),
+    });
+    if ( isPlatform('desktop') ) {
+      this.gesture.enable();
     }
   }
 
@@ -188,6 +206,37 @@ export class PickerColumnInternal implements ComponentInterface {
     }
   };
 
+  private onStart(detail: GestureDetail) {
+    // We have to prevent default in order to block scrolling under the picker
+    // but we DO NOT have to stop propagation, since we still want
+    // some "click" events to capture
+    if (detail.event.cancelable) {
+      detail.event.preventDefault();
+    }
+    detail.event.stopPropagation();
+
+    this.startScrollY = this.el.scrollTop;
+    this.isGesture = true;
+  }
+
+  private onMove(detail: GestureDetail) {
+    if (detail.event.cancelable) {
+      detail.event.preventDefault();
+    }
+    detail.event.stopPropagation();
+
+    if (!this.isGesture) return;
+    const deltaY = detail.startY - detail.currentY;
+    const diffTime = detail.currentTime - detail.startTime;
+    const vDY = Math.abs(deltaY / diffTime);
+    const vDeltaY = deltaY + (deltaY * vDY);
+
+    this.el.scroll({top: this.startScrollY + vDeltaY, left: 0, behavior: 'smooth'});
+  }
+
+  private onEnd() {
+    this.isGesture = false;
+  }
   /**
    * When ionInputModeChange is emitted, each column
    * needs to check if it is the one being made available
