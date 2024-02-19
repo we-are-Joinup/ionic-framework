@@ -18,7 +18,7 @@ import type {
 } from '../../interface';
 import { findIonContent, printIonContentErrorMsg } from '../../utils/content';
 import { CoreDelegate, attachComponent, detachComponent } from '../../utils/framework-delegate';
-import { raf, inheritAttributes } from '../../utils/helpers';
+import { raf, inheritAttributes, clamp } from '../../utils/helpers';
 import type { Attributes } from '../../utils/helpers';
 import { KEYBOARD_DID_OPEN } from '../../utils/keyboard/keyboard';
 import { printIonWarning } from '../../utils/logging';
@@ -129,7 +129,7 @@ export class Modal implements ComponentInterface, OverlayInterface {
    * array must be the value of the `initialBreakpoint` property.
    * For example: [0, .25, .5, 1]
    */
-  @Prop() breakpoints?: number[];
+  @Prop({ mutable: true }) breakpoints?: number[];
 
   /**
    * A decimal value between 0 and 1 that indicates the
@@ -337,20 +337,27 @@ export class Modal implements ComponentInterface, OverlayInterface {
     }
   }
 
-  /**
-   * Allow to update the modal breakpoints and set the new current breakpoint
-   */
-  @Method()
-  async updateBreakpoints(breakpoints: number[] | undefined, currentBreakpoint: number): Promise<void> {
-    this.breakpointsChanged(breakpoints);
-    this.breakpoints = this.sortedBreakpoints;
-    this.currentBreakpoint = currentBreakpoint;
-    this.initSheetGesture(currentBreakpoint);
-  }
-
-  breakpointsChanged(breakpoints: number[] | undefined) {
+  @Watch('breakpoints')
+  breakpointsChanged(breakpoints: number[] | undefined, previousBreakpoints?: number[]) {
     if (breakpoints !== undefined) {
       this.sortedBreakpoints = breakpoints.sort((a, b) => a - b);
+
+      if (previousBreakpoints) {
+        /**
+         * If the new breakpoints are different from the previous ones, we need to
+         * re-initialize the gesture.
+         */
+        if (breakpoints.length !== previousBreakpoints.length || !breakpoints.every((v, i) => v === previousBreakpoints[i])) {
+          const { currentBreakpoint, sortedBreakpoints } = this;
+          // Calculate the initial breakpoint by comparing the current breakpoint vs. the min/max breakpoints.
+          const newBreakpoint = clamp(sortedBreakpoints[0], currentBreakpoint!, sortedBreakpoints[sortedBreakpoints.length - 1]);
+          this.initSheetGesture(newBreakpoint);
+          if (currentBreakpoint != null && !breakpoints.includes(currentBreakpoint)) {
+            // Current breakpoint is not within the new breakpoints, so we need to update the current breakpoint.
+            this.setCurrentBreakpoint(newBreakpoint);
+          }
+        }
+      }
     }
   }
 
