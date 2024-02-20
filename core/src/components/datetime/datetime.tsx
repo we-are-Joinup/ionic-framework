@@ -1393,7 +1393,7 @@ export class Datetime implements ComponentInterface {
                 )}
                 <div>
                   {showClearButton && (
-                    <ion-button id="clear-button" color={this.color} onClick={() => clearButtonClick()}>
+                    <ion-button id="clear-button" color={'#dadada'} onClick={() => clearButtonClick()}>
                       {this.clearText}
                     </ion-button>
                   )}
@@ -1913,15 +1913,9 @@ export class Datetime implements ComponentInterface {
       <div class="calendar-header">
         <div class="calendar-action-buttons">
           <div class="calendar-month-year">
-            <ion-item button detail={false} lines="none" onClick={() => this.toggleMonthAndYearView()}>
+            <ion-item detail={false} lines="none">
               <ion-label>
-                {getMonthAndYear(this.locale, this.workingParts)}
-                <ion-icon
-                  aria-hidden="true"
-                  icon={this.showMonthAndYear ? expandedIcon : collapsedIcon}
-                  lazy={false}
-                  flipRtl={true}
-                ></ion-icon>
+                {getMonthAndYear(this.locale, this.workingParts).toUpperCase()}
               </ion-label>
             </ion-item>
           </div>

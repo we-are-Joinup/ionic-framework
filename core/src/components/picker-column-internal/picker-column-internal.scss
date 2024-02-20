@@ -68,6 +68,8 @@
   overflow: hidden;
 
   scroll-snap-align: center;
+
+  margin-bottom: -5px;
 }
 
 :host .picker-item-empty,
@@ -82,7 +84,8 @@
 }
 
 :host(.picker-column-active) .picker-item.picker-item-active {
-  color: current-color(base);
+  font-weight: 800;
+  color: rgb(0, 163, 150);
 }
 
 @media (any-hover: hover) {

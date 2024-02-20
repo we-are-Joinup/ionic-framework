@@ -79,6 +79,12 @@
   @include visually-hidden();
 }
 
+:host ::slotted(ion-picker-column-internal) {
+  font-size: 14px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
 :host ::slotted(ion-picker-column-internal:first-of-type) {
   text-align: start;
 }

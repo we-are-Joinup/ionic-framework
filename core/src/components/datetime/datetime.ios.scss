@@ -132,6 +132,7 @@
  * should have white color.
  */
 :host .calendar-day.calendar-day-today.calendar-day-active {
+  font-weight: 800;
   color: current-color(contrast);
 }
 

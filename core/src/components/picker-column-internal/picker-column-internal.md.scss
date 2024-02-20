@@ -2,5 +2,6 @@
 @import "../../themes/ionic.globals.md";
 
 :host .picker-item-active {
-  color: current-color(base);
+  color: rgb(0, 163, 150);
+  font-weight: 800;
 }

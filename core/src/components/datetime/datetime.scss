@@ -357,15 +357,16 @@ ion-picker-column-internal {
 }
 
 .calendar-day-highlight {
-  @include border-radius(32px, 32px, 32px, 32px);
   @include padding(4px, 4px, 4px, 4px);
-
   position: absolute;
-
   width: 32px;
   height: 32px;
-
   z-index: -1;
+  border-radius: 4px;
+  padding-top: 0;
+  padding-bottom: 0;
+  border: none;
+  box-shadow: none;
 }
 
 // Time / Header
@@ -389,6 +390,15 @@ ion-picker-column-internal {
   display: flex;
 
   align-items: center;
+}
+
+:host .calendar-month-year {
+  ion-item {
+    ion-label {
+      font-size: 14px;
+      font-weight: 800;
+    }
+  }
 }
 
 :host .time-body {
