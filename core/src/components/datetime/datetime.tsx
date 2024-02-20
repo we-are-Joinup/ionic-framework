@@ -1,6 +1,6 @@
 import type { ComponentInterface, EventEmitter } from '@stencil/core';
 import { Component, Element, Event, Host, Method, Prop, State, Watch, h, writeTask } from '@stencil/core';
-import { caretDownSharp, caretUpSharp, chevronBack, chevronDown, chevronForward } from 'ionicons/icons';
+import { chevronBack, chevronForward } from 'ionicons/icons';
 
 import { getIonMode } from '../../global/ionic-global';
 import type { Color, Mode, StyleEventDetail } from '../../interface';
@@ -1346,10 +1346,6 @@ export class Datetime implements ComponentInterface {
     });
   };
 
-  private toggleMonthAndYearView = () => {
-    this.showMonthAndYear = !this.showMonthAndYear;
-  };
-
   /**
    * Universal render methods
    * These are pieces of datetime that
@@ -1900,8 +1896,6 @@ export class Datetime implements ComponentInterface {
    */
 
   private renderCalendarHeader(mode: Mode) {
-    const expandedIcon = mode === 'ios' ? chevronDown : caretUpSharp;
-    const collapsedIcon = mode === 'ios' ? chevronForward : caretDownSharp;
 
     const prevMonthDisabled = isPrevMonthDisabled(this.workingParts, this.minParts, this.maxParts);
     const nextMonthDisabled = isNextMonthDisabled(this.workingParts, this.maxParts);
