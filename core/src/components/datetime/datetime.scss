@@ -29,7 +29,7 @@
  * width avoids this layout shifting.
  */
 ion-picker-column-internal {
-  min-width: 26px;
+  min-width: 0px;
 }
 
 :host(.datetime-size-fixed) {
