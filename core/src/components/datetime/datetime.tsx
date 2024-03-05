@@ -3,7 +3,7 @@ import { Component, Element, Event, Host, Method, Prop, State, Watch, h, writeTa
 import { chevronBack, chevronForward } from 'ionicons/icons';
 
 import { getIonMode } from '../../global/ionic-global';
-import type { Color, Mode, StyleEventDetail } from '../../interface';
+import type { Color, StyleEventDetail } from '../../interface';
 import { startFocusVisible } from '../../utils/focus-visible';
 import { getElementRoot, raf, renderHiddenInput } from '../../utils/helpers';
 import { printIonError, printIonWarning } from '../../utils/logging';
@@ -1895,7 +1895,7 @@ export class Datetime implements ComponentInterface {
    * Grid Render Methods
    */
 
-  private renderCalendarHeader(mode: Mode) {
+  private renderCalendarHeader() {
 
     const prevMonthDisabled = isPrevMonthDisabled(this.workingParts, this.minParts, this.maxParts);
     const nextMonthDisabled = isNextMonthDisabled(this.workingParts, this.maxParts);
@@ -2106,10 +2106,10 @@ export class Datetime implements ComponentInterface {
       </div>
     );
   }
-  private renderCalendar(mode: Mode) {
+  private renderCalendar() {
     return (
       <div class="datetime-calendar" key="datetime-calendar">
-        {this.renderCalendarHeader(mode)}
+        {this.renderCalendarHeader()}
         {this.renderCalendarBody()}
       </div>
     );
@@ -2261,7 +2261,7 @@ export class Datetime implements ComponentInterface {
    * All presentation types are rendered from here.
    */
 
-  private renderDatetime(mode: Mode) {
+  private renderDatetime() {
     const { presentation, preferWheel } = this;
 
     /**
@@ -2277,7 +2277,7 @@ export class Datetime implements ComponentInterface {
       case 'date-time':
         return [
           this.renderHeader(),
-          this.renderCalendar(mode),
+          this.renderCalendar(),
           this.renderCalendarViewMonthYearPicker(),
           this.renderTime(),
           this.renderFooter(),
@@ -2286,7 +2286,7 @@ export class Datetime implements ComponentInterface {
         return [
           this.renderHeader(),
           this.renderTime(),
-          this.renderCalendar(mode),
+          this.renderCalendar(),
           this.renderCalendarViewMonthYearPicker(),
           this.renderFooter(),
         ];
@@ -2299,7 +2299,7 @@ export class Datetime implements ComponentInterface {
       default:
         return [
           this.renderHeader(),
-          this.renderCalendar(mode),
+          this.renderCalendar(),
           this.renderCalendarViewMonthYearPicker(),
           this.renderFooter(),
         ];
@@ -2351,7 +2351,7 @@ export class Datetime implements ComponentInterface {
           }),
         }}
       >
-        {this.renderDatetime(mode)}
+        {this.renderDatetime()}
       </Host>
     );
   }
