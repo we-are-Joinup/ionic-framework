@@ -38,14 +38,15 @@
   --padding-start: #{$datetime-ios-padding};
   --background-hover: transparent;
   --background-activated: transparent;
-
+  
   font-size: 16px;
   font-weight: 600;
 }
 
 :host .calendar-action-buttons ion-item ion-icon,
 :host .calendar-action-buttons ion-buttons ion-button {
-  color: current-color(base);
+  // color: current-color(base);
+  color: #595959 !important;
 }
 
 :host .calendar-action-buttons ion-buttons {
@@ -89,7 +90,7 @@
 }
 
 :host .calendar-day {
-  font-size: 20px;
+  //font-size: 20px;
 }
 
 .calendar-day:focus .calendar-day-highlight,
@@ -172,4 +173,12 @@
 
 :host .datetime-action-buttons {
   width: 100%;
+}
+
+:host .calendar-month-year {
+  ion-item {
+    ion-label {
+      font-size: 13px;
+    }
+  }
 }

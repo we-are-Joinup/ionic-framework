@@ -1,1 +1,6 @@
 @import "./picker-column-internal.scss";
+
+:host .picker-item-active {
+  color: #00a396;
+  font-weight: 800;
+}

@@ -1940,7 +1940,7 @@ export class Datetime implements ComponentInterface {
           </div>
         </div>
         <div class="calendar-days-of-week" aria-hidden="true">
-          {getDaysOfWeek(this.locale, mode, this.firstDayOfWeek % 7).map((d) => {
+          {getDaysOfWeek(this.locale, 'md', this.firstDayOfWeek % 7).map((d) => {
             return <div class="day-of-week">{d}</div>;
           })}
         </div>
