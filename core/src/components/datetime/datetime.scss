@@ -223,7 +223,7 @@ ion-picker-column-internal {
   display: flex;
 
   justify-content: space-between;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
 :host .calendar-action-buttons ion-item,
@@ -248,7 +248,7 @@ ion-picker-column-internal {
   grid-template-columns: repeat(7, 1fr);
 
   text-align: center;
-  font-size: 16px;
+  font-size: 16px !important;
 }
 
 // Calendar / Body
