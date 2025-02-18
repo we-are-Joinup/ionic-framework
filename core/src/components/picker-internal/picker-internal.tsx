@@ -22,7 +22,6 @@ export class PickerInternal implements ComponentInterface {
   private useInputMode = false;
   private inputModeColumn?: HTMLIonPickerColumnInternalElement;
   private highlightEl?: HTMLElement;
-  private actionOnClick?: () => void;
   private destroyKeypressListener?: () => void;
   private singleColumnSearchTimeout?: ReturnType<typeof setTimeout>;
 
@@ -80,7 +79,6 @@ export class PickerInternal implements ComponentInterface {
     const { relatedTarget } = ev;
 
     if (!relatedTarget || (relatedTarget.tagName !== 'ION-PICKER-COLUMN-INTERNAL' && relatedTarget !== this.inputEl)) {
-      this.exitInputMode();
     }
   };
 
@@ -116,15 +114,6 @@ export class PickerInternal implements ComponentInterface {
      * the column using their keyboard and
      * we should enter/exit input mode automatically.
      */
-    if (!this.actionOnClick) {
-      const columnEl = target as HTMLIonPickerColumnInternalElement;
-      const allowInput = columnEl.numericInput;
-      if (allowInput) {
-        this.enterInputMode(columnEl, false);
-      } else {
-        this.exitInputMode();
-      }
-    }
   };
 
   /**
@@ -132,13 +121,7 @@ export class PickerInternal implements ComponentInterface {
    * function that has been set in onPointerDown
    * so that we enter/exit input mode correctly.
    */
-  private onClick = () => {
-    const { actionOnClick } = this;
-    if (actionOnClick) {
-      actionOnClick();
-      this.actionOnClick = undefined;
-    }
-  };
+  private onClick = () => {};
 
   /**
    * Clicking a column also focuses the column on
@@ -150,7 +133,7 @@ export class PickerInternal implements ComponentInterface {
    * runs and runs the actionOnClick callback.
    */
   private onPointerDown = (ev: PointerEvent) => {
-    const { useInputMode, inputModeColumn, el } = this;
+    const { useInputMode } = this;
     if (this.isInHighlightBounds(ev)) {
       /**
        * If we were already in
@@ -175,20 +158,7 @@ export class PickerInternal implements ComponentInterface {
            * for the new column rather than switching to
            * input mode for all columns.
            */
-          if (inputModeColumn && inputModeColumn === ev.target) {
-            this.actionOnClick = () => {
-              this.enterInputMode();
-            };
-          } else {
-            this.actionOnClick = () => {
-              this.enterInputMode(ev.target as HTMLIonPickerColumnInternalElement);
-            };
-          }
-        } else {
-          this.actionOnClick = () => {
-            this.exitInputMode();
-          };
-        }
+        } 
         /**
          * If we were not already in
          * input mode, then we should
@@ -199,19 +169,13 @@ export class PickerInternal implements ComponentInterface {
          * If there is only 1 numeric input column
          * then we should skip multi column input.
          */
-        const columns = el.querySelectorAll('ion-picker-column-internal.picker-column-numeric-input');
-        const columnEl = columns.length === 1 ? (ev.target as HTMLIonPickerColumnInternalElement) : undefined;
-        this.actionOnClick = () => {
-          this.enterInputMode(columnEl);
-        };
+        //const columns = el.querySelectorAll('ion-picker-column-internal.picker-column-numeric-input');
+        //const columnEl = columns.length === 1 ? (ev.target as HTMLIonPickerColumnInternalElement) : undefined;
+  
       }
 
       return;
     }
-
-    this.actionOnClick = () => {
-      this.exitInputMode();
-    };
   };
 
   /**
@@ -227,53 +191,7 @@ export class PickerInternal implements ComponentInterface {
    * users from having any visual indication of which
    * column is focused.
    */
-  private enterInputMode = (columnEl?: HTMLIonPickerColumnInternalElement, focusInput = true) => {
-    const { inputEl, el } = this;
-    if (!inputEl) {
-      return;
-    }
 
-    /**
-     * Only active input mode if there is at
-     * least one column that accepts numeric input.
-     */
-    const hasInputColumn = el.querySelector('ion-picker-column-internal.picker-column-numeric-input');
-    if (!hasInputColumn) {
-      return;
-    }
-
-    /**
-     * If columnEl is undefined then
-     * it is assumed that all numeric pickers
-     * are eligible for text entry.
-     * (i.e. hour and minute columns)
-     */
-    this.useInputMode = true;
-    this.inputModeColumn = columnEl;
-
-    /**
-     * Users with a keyboard and mouse can
-     * activate input mode where the input is
-     * focused as well as when it is not focused,
-     * so we need to make sure we clean up any
-     * old listeners.
-     */
-    if (focusInput) {
-      if (this.destroyKeypressListener) {
-        this.destroyKeypressListener();
-        this.destroyKeypressListener = undefined;
-      }
-
-      inputEl.focus();
-    } else {
-      el.addEventListener('keypress', this.onKeyPress);
-      this.destroyKeypressListener = () => {
-        el.removeEventListener('keypress', this.onKeyPress);
-      };
-    }
-
-    this.emitInputModeChange();
-  };
 
   /**
    * @internal
@@ -301,23 +219,6 @@ export class PickerInternal implements ComponentInterface {
     this.emitInputModeChange();
   }
 
-  private onKeyPress = (ev: KeyboardEvent) => {
-    const { inputEl } = this;
-    if (!inputEl) {
-      return;
-    }
-
-    const parsedValue = parseInt(ev.key, 10);
-
-    /**
-     * Only numbers should be allowed
-     */
-    if (!Number.isNaN(parsedValue)) {
-      inputEl.value += ev.key;
-
-      this.onInputChange();
-    }
-  };
 
   private selectSingleColumn = () => {
     const { inputEl, inputModeColumn, singleColumnSearchTimeout } = this;

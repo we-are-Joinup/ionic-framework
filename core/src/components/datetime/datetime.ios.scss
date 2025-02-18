@@ -95,7 +95,7 @@
 
 .calendar-day:focus .calendar-day-highlight,
 .calendar-day.calendar-day-active .calendar-day-highlight {
-  opacity: 0.2;
+  // opacity: 0.2;
 }
 
 .calendar-day.calendar-day-active .calendar-day-highlight {
@@ -114,7 +114,10 @@
  * should have ion-color for text color.
  */
 :host .calendar-day.calendar-day-today {
-  color: current-color(base);
+  color: #00a396;
+  .calendar-day-highlight {
+    border: solid 1px #00a396;
+  }
 }
 
 /**
@@ -123,8 +126,7 @@
  * text color and be bolder.
  */
 :host .calendar-day.calendar-day-active {
-  color: current-color(base);
-
+  color: white;
   font-weight: 600;
 }
 
