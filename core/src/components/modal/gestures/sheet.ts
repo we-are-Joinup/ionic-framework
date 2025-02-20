@@ -1,3 +1,4 @@
+import { getIonMode } from '../../../global/ionic-global';
 import type { Animation } from '../../../interface';
 import type { GestureDetail } from '../../../utils/gesture';
 import { createGesture } from '../../../utils/gesture';
@@ -359,7 +360,7 @@ export const createSheetGesture = (
           },
           { oneTimeCallback: true }
         )
-        .progressEnd(1, 0, 500);
+        .progressEnd(1, 0, getIonMode(this) === 'ios' ? 0 : 500);
     });
   };
 
