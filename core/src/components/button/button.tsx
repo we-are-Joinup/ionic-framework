@@ -186,6 +186,11 @@ export class Button implements ComponentInterface, AnchorInterface, ButtonInterf
 
   private handleClick = (ev: Event) => {
     const { el } = this;
+    if (this.disabled) {
+      ev.preventDefault();
+      ev.stopImmediatePropagation();
+      return;
+    }
     if (this.type === 'button') {
       openURL(this.href, ev, this.routerDirection, this.routerAnimation);
     } else if (hasShadowDom(el)) {
