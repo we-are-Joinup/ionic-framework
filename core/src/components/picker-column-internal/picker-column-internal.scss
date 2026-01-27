@@ -73,6 +73,7 @@
 
   color: #ccc;
   
+  font-size: 19px;
 }
 
 :host .picker-item-empty,
@@ -89,6 +90,7 @@
 :host(.picker-column-active) .picker-item.picker-item-active {
   font-weight: 800;
   color: rgb(0, 163, 150);
+  font-size: 20px;
 }
 
 @media (any-hover: hover) {
